@@ -32,5 +32,36 @@ connection.connect(function(err) {
   console.log("connected as id " + connection.threadId);
 });
 
-//ROUTES
+// ROUTES GO HERE
+
+// VIEW ROUTE
+// render UI
+
+app.get("/", (req, res) => {
+    connection.query('SELECT * FROM movies', (err, data) => {
+        console.log(data)
+        res.render('index', { movies: data })
+
+    })
+})
+
+// API ROUTES
+// GET
+// POST
+app.post('/api/movies', (req, res) => {
+    const newMovieText = req.body.newMovieText
+    // insert to database
+    connection.query('INSERT INTO movies (movie) VALUES (?)', {newMovieText}, (err, response) => {
+        if (err) throw err
+        res.redirect('/')
+    })
+    // redirect to home route
+})
+
+// PUT
+// DELETE
+app.delete('/api/movies/:id', (req, res) => {
+    
+})
+
 app.listen(PORT, () => console.log(`Server listening at http://localhost:${PORT}`))
