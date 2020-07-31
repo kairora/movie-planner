@@ -32,17 +32,11 @@ connection.connect(function(err) {
   console.log("connected as id " + connection.threadId);
 });
 
-// ROUTES GO HERE
-
 // VIEW ROUTE
-// render UI
-
-app.get("/", (req, res) => {
-    connection.query('SELECT * FROM movies', (err, data) => {
-        console.log(data)
-        res.render('index', { movies: data })
-
-    })
+app.get('/', (req, res) => {
+  connection.query('SELECT * FROM movies', (err, data) => {
+    res.render('index', { movies: data })
+  })
 })
 
 // API ROUTES
@@ -59,6 +53,15 @@ app.post('/api/movies', (req, res) => {
 })
 
 // PUT
+app.put('/api/movies/:id', (req, res) => {
+    const id = req.params.id
+    const updatedMovieText = req.body.updatedMovieText
+    connection.query('UPDATE movies  SET movie = ? WHERE id = ?', [updatedMovieText, id], (err, result) => {
+        if (err) throw err
+        res.status(200).send()
+
+    })
+})
 // DELETE
 app.delete('/api/movies/:id', (req, res) => {
     const id = req.params.id
