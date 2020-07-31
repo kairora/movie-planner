@@ -51,9 +51,9 @@ app.get("/", (req, res) => {
 app.post('/api/movies', (req, res) => {
     const newMovieText = req.body.newMovieText
     // insert to database
-    connection.query('INSERT INTO movies (movie) VALUES (?)', {newMovieText}, (err, response) => {
+    connection.query('INSERT INTO movies (movie) VALUES (?)', [newMovieText], (err, response) => {
         if (err) throw err
-        res.redirect('/')
+        res.status(200).send()
     })
     // redirect to home route
 })
@@ -61,7 +61,13 @@ app.post('/api/movies', (req, res) => {
 // PUT
 // DELETE
 app.delete('/api/movies/:id', (req, res) => {
-    
+    const id = req.params.id
+
+    connection.query('DELETE FROM movies wHERE?', { id }, (err, result) => {
+        if (err) throw err
+        res.status(200).send()
+    })
+
 })
 
 app.listen(PORT, () => console.log(`Server listening at http://localhost:${PORT}`))
